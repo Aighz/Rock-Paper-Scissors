@@ -1,0 +1,1 @@
+This is a game of Rock Paper Scissors, built in JavaScript, where i will follow The Odin Project, and build it according to their assignment.

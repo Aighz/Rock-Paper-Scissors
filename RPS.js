@@ -1,3 +1,10 @@
+let playerPoints = 0;
+let computerPoints = 0;
+const gameBox = document.querySelector("#game");
+const scoreBox = document.querySelector("#score");
+const winnerBox = document.querySelector("#winner");
+let winner = "";
+
 function computerPlay() {
   let x = Math.floor(Math.random() * 3);
   if (x === 0) {
@@ -11,9 +18,13 @@ function computerPlay() {
   }
 }
 
-function properCase(word) {
-  return word[0].toUpperCase() + word.slice(1).toLowerCase();
-}
+const buttons = document.querySelectorAll("button");
+buttons.forEach((button) => {
+  button.addEventListener("click", function (e) {
+    winnerBox.textContent = "";
+    game(e.target.id);
+  });
+});
 
 function playRound(playerSelection, computerSelection) {
   if (
@@ -35,27 +46,24 @@ function playRound(playerSelection, computerSelection) {
   }
 }
 
-function game() {
-  let playerPoint = 0;
-  let computerPoint = 0;
-  for (i = 0; i < 5; i++) {
-    let playerChoice = properCase(prompt("Rock, Paper og Scissors?"));
-    let computerChoice = computerPlay();
-    let message = playRound(playerChoice, computerChoice);
-    if (message.startsWith("You Win!")) {
-      playerPoint += 1;
-    } else if (message.startsWith("You Lose!")) {
-      computerPoint += 1;
-    } else {
-      i -= 1;
-    }
-    console.log(message);
+function game(playerSelection) {
+  let computerSelection = computerPlay();
+  let message = playRound(playerSelection, computerSelection);
+  if (message.startsWith("You Win!")) {
+    playerPoints += 1;
+  } else if (message.startsWith("You Lose!")) {
+    computerPoints += 1;
   }
-  let result = "";
-  if (playerPoint >= 3) {
-    result = "won";
+  gameBox.textContent = `${message}`;
+  scoreBox.textContent = `The score is ${playerPoints} - ${computerPoints}`;
+  if (playerPoints === 5) {
+    winner = "You";
+  } else if (computerPoints === 5) {
+    winner = "The Computer";
   } else {
-    result = "lost";
+    return;
   }
-  console.log(`You ${result} the Best of 5! The game ended ${playerPoint} - ${computerPoint}!`)
+  winnerBox.textContent = `${winner} won the Game!`;
+  computerPoints = 0;
+  playerPoints = 0;
 }
